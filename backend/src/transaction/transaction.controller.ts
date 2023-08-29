@@ -1,4 +1,11 @@
-import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  NotFoundException,
+  Post,
+} from '@nestjs/common';
 import { Client, getBalanceChanges, Wallet } from 'xrpl';
 import { TransactionService } from './transaction.service';
 import { TransactionSendDto } from '../dto/transacton.send.dto';
@@ -12,6 +19,8 @@ import { TransactionDto } from '../dto/transacton.dto';
 @ApiTags('transactions')
 @Controller('v1/tx')
 export class TransactionController {
+  private readonly logger = new Logger(TransactionController.name);
+
   constructor(
     private readonly transactionService: TransactionService,
     private readonly walletService: WalletService,
@@ -82,7 +91,7 @@ export class TransactionController {
     let client = null;
     try {
       const wallet = Wallet.fromSeed(walletEntity.seed);
-      client = new Client('wss://s.altnet.rippletest.net:51233');
+      client = new Client(process.env.XRPL_CLIENT);
       await client.connect();
       // Prepare transaction
       const transactionData = {
@@ -99,7 +108,7 @@ export class TransactionController {
       // Check transaction results
       return JSON.stringify(getBalanceChanges(tx.result.meta), null, 2);
     } catch (error) {
-      console.log(error);
+      this.logger.error(`Error processing test wallet data: ${error.data}`);
       return error;
     } finally {
       if (client != null) await client.disconnect();
@@ -113,7 +122,7 @@ export class TransactionController {
     let client = null;
     try {
       const wallet = Wallet.fromSeed(walletEntity.seed);
-      client = new Client('wss://s.altnet.rippletest.net:51233');
+      client = new Client(process.env.XRPL_CLIENT);
       await client.connect();
 
       return await client.request({
@@ -122,7 +131,7 @@ export class TransactionController {
         ledger_index: 'validated',
       });
     } catch (error) {
-      console.log(error);
+      this.logger.log(`Error processing account info data: ${error.data}`);
       throw new NotFoundException(
         `Wallet not found for account seed ${body.account}`,
       );

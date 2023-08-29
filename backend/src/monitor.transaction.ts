@@ -1,8 +1,10 @@
 import { TransactionService } from './transaction/transaction.service';
 import { Transaction } from './entity/transaction.entity';
 import { WebSocket } from 'ws';
+import { Logger } from '@nestjs/common';
 
 let socketData = null;
+const logger = new Logger('Monitor');
 
 /**
  * Subscribe to all wallets addresses in the system
@@ -16,7 +18,7 @@ export async function subscribeToAccount(
   try {
     if (socketData != null) socketData.close();
     if (account.length == 0) return;
-    const socket = new WebSocket('wss://s.altnet.rippletest.net:51233');
+    const socket = new WebSocket(process.env.XRPL_CLIENT);
     socket.addEventListener('message', (event) => {
       const result = JSON.parse(event.data);
       if (
@@ -29,9 +31,7 @@ export async function subscribeToAccount(
     });
     socketData = socket;
     socket.addEventListener('open', async () => {
-      // This callback runs when the connection is open
-      // const response = await api_request({ command: 'ping' });
-      console.log(`Monitor addresses: ${account}`);
+      logger.log(`Monitor addresses: ${account}`);
       const subscribeCommand = {
         command: 'subscribe',
         accounts: account,
@@ -39,12 +39,12 @@ export async function subscribeToAccount(
       await api_request(subscribeCommand, socket);
     });
   } catch (error) {
-    console.log(`Error in wallet subscription: ${JSON.stringify(error.data)}`);
+    logger.error(`Error in wallet subscription: ${JSON.stringify(error.data)}`);
   }
 }
 
 async function writeTxToDB(tx: any, transactionService: TransactionService) {
-  console.log(`Write data to db! ${JSON.stringify(tx)}`);
+  logger.log(`Write data to db! ${JSON.stringify(tx)}`);
   const transaction = new Transaction();
   transaction.ledgerIndex = Number(tx.ledger_index);
   transaction.ledgerHash = tx.ledger_hash;
@@ -59,7 +59,7 @@ async function writeTxToDB(tx: any, transactionService: TransactionService) {
 
 function api_request(options, socket: WebSocket) {
   if (socket.readyState === 0) {
-    console.error('Socket is not connected yet');
+    logger.error(`Socket is not connected yet - ${options}`);
     return;
   }
   new Promise((_, reject) => {

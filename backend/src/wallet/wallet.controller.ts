@@ -93,7 +93,7 @@ export class WalletController {
   async newWallet(): Promise<WalletDto> {
     let client = null;
     try {
-      client = new Client('wss://s.altnet.rippletest.net:51233');
+      client = new Client(process.env.XRPL_CLIENT);
       await client.connect();
       // create new wallet and send some amount to it
       const createWallet = await client.fundWallet();

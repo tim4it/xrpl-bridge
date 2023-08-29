@@ -24,7 +24,12 @@ services:
     build: ./backend
     ports:
       - '3000:3000'
-    environment: ['XRPL_CLIENT=${XRPL_CLIENT}']
+    environment: [
+      'POSTGRES_HOST=${POSTGRES_HOST}',
+      'POSTGRES_USER=${POSTGRES_USER}',
+      'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}',
+      'POSTGRES_DATABASE=${POSTGRES_DATABASE}',
+      'XRPL_CLIENT=${XRPL_CLIENT}']
     depends_on:
       db:
         condition: service_healthy
