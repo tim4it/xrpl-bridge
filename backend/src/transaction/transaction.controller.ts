@@ -2,7 +2,7 @@ import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
 import { Client, getBalanceChanges, Wallet } from 'xrpl';
 import { TransactionService } from './transaction.service';
 import { TransactionSendDto } from '../dto/transacton.send.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TransactionAccountDto } from '../dto/transaction.account.dto';
 import { WalletService } from '../wallet/wallet.service';
 import { Wallet as WalletEntity } from '../entity/wallet.entity';
@@ -18,11 +18,28 @@ export class TransactionController {
   ) {}
 
   @Get('all')
+  @ApiOperation({ summary: 'Get all transactional information' })
+  @ApiResponse({
+    status: 200,
+    description: 'View all transactions',
+    type: TransactionDto,
+    isArray: true,
+  })
   async getAllTransactions(): Promise<TransactionDto[]> {
     return this.transactionService.findAll();
   }
 
   @Post('all')
+  @ApiOperation({
+    summary:
+      'Get all filtered transactional information (source or destination)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'View all filtered transactions',
+    type: TransactionDto,
+    isArray: true,
+  })
   async getFilteredTransactions(
     @Body() body: TransactionFilterDto,
   ): Promise<TransactionDto[]> {
@@ -35,6 +52,13 @@ export class TransactionController {
       );
   }
 
+  @ApiOperation({
+    summary: 'Send transaction from source to destination with amount',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Send transaction',
+  })
   @Post('send')
   async send(@Body() body: TransactionSendDto): Promise<any> {
     return this.walletService
@@ -42,6 +66,11 @@ export class TransactionController {
       .then((walletFound) => this.sendData(body, walletFound));
   }
 
+  @ApiOperation({ summary: 'View account information' })
+  @ApiResponse({
+    status: 200,
+    description: 'Account info',
+  })
   @Post('account-info')
   async accountInfo(@Body() body: TransactionAccountDto): Promise<any> {
     return this.walletService
