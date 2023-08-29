@@ -1,11 +1,13 @@
+# docker-compose.yml
+
+version: '3.1'
+
 services:
   db:
     image: postgres:latest
     restart: always
     ports:
       - '5432:5432'
-    volumes:
-      - ./backend/db:/docker-entrypoint-initdb.d/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=wallet
@@ -18,8 +20,14 @@ services:
     networks:
       - default
 
-volumes:
-  database:
-
-networks:
-  default:
+  xrpl-backend:
+    build: ./backend
+    ports:
+      - '3000:3000'
+    environment: ['XRPL_CLIENT=${XRPL_CLIENT}']
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ['node', 'main.js']
+    networks:
+      - default
