@@ -16,6 +16,16 @@ describe('Transaction controller', () => {
   let walletService: WalletService;
 
   beforeEach(async () => {
+    jest
+      .spyOn(TransactionController.prototype, <any>'sendData')
+      .mockImplementation(async () => {
+        return { a: 'b' };
+      });
+    jest
+      .spyOn(TransactionController.prototype, <any>'accountInfoData')
+      .mockImplementation(async () => {
+        return { a: 'b' };
+      });
     const app: TestingModule = await Test.createTestingModule({
       controllers: [TransactionController, WalletController],
       providers: [

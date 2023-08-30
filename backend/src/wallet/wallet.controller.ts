@@ -32,7 +32,7 @@ export class WalletController {
     type: WalletDto,
     isArray: true,
   })
-  async getWallets() {
+  async getWallets(): Promise<WalletDto[]> {
     return this.walletService.findAll();
   }
 
@@ -44,10 +44,11 @@ export class WalletController {
     description: 'Create custom wallet',
     type: WalletDto,
   })
-  async addWallet(@Body() body: WalletDto) {
+  async addWallet(@Body() body: WalletDto): Promise<WalletDto> {
     return this.walletService.create(body).then(async (added) => {
-      await this.findAndSubscribe();
-      return WalletDto.fromEntity(added);
+      return await this.findAndSubscribe().then(() => {
+        return WalletDto.fromEntity(added);
+      });
     });
   }
 
@@ -61,10 +62,9 @@ export class WalletController {
     description: 'Update wallet',
     type: WalletDto,
   })
-  async updateWallet(@Body() body: AddressPatchDto) {
+  async updateWallet(@Body() body: AddressPatchDto): Promise<WalletDto> {
     return this.walletService.update(body).then(async (updated) => {
-      await this.findAndSubscribe();
-      return updated;
+      return await this.findAndSubscribe().then(() => updated);
     });
   }
 
@@ -76,10 +76,9 @@ export class WalletController {
     description: 'Delete wallet',
     type: WalletDto,
   })
-  async deleteWallet(@Body() body: AddressDeleteDto) {
+  async deleteWallet(@Body() body: AddressDeleteDto): Promise<WalletDto> {
     return this.walletService.remove(body.address).then(async (removed) => {
-      await this.findAndSubscribe();
-      return removed;
+      return await this.findAndSubscribe().then(() => removed);
     });
   }
 
@@ -107,8 +106,9 @@ export class WalletController {
       return this.walletService
         .create(walletDTO)
         .then(async (walletCreated) => {
-          await this.findAndSubscribe();
-          return WalletDto.fromEntity(walletCreated);
+          return await this.findAndSubscribe().then(() =>
+            WalletDto.fromEntity(walletCreated),
+          );
         });
     } catch (error) {
       return error;
@@ -118,14 +118,15 @@ export class WalletController {
   }
 
   /**
-   * Find all wallet data addresses and subscribe
+   * Find all wallet data addresses and subscribe for monitoring functionality
    * @private
    */
   private async findAndSubscribe(): Promise<WalletDto[]> {
     return await this.walletService.findAll().then(async (allWallets) => {
       const addresses = allWallets.map((wallet) => wallet.address);
-      await subscribeToAccount(addresses, this.transactionService);
-      return allWallets;
+      return await subscribeToAccount(addresses, this.transactionService).then(
+        () => allWallets,
+      );
     });
   }
 }

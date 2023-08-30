@@ -57,7 +57,7 @@ async function writeTxToDB(tx: any, transactionService: TransactionService) {
   await transactionService.create(transaction);
 }
 
-function api_request(options, socket: WebSocket) {
+async function api_request(options, socket: WebSocket) {
   if (socket.readyState === 0) {
     logger.error(`Socket is not connected yet - ${options}`);
     return;

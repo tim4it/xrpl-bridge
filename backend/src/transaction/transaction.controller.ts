@@ -87,6 +87,12 @@ export class TransactionController {
       .then((walletFound) => this.accountInfoData(body, walletFound));
   }
 
+  /**
+   * Send transaction from source to destination wallet address with amount. Return balance changes
+   * @param body body data from {@link TransactionSendDto}
+   * @param walletEntity wallet entity {@link WalletEntity}
+   * @private
+   */
   private async sendData(body: TransactionSendDto, walletEntity: WalletEntity) {
     let client = null;
     try {
@@ -115,6 +121,12 @@ export class TransactionController {
     }
   }
 
+  /**
+   * Get account info data from wallet address/account
+   * @param body body data from {@link TransactionAccountDto}
+   * @param walletEntity wallet entity {@link WalletEntity}
+   * @private
+   */
   private async accountInfoData(
     body: TransactionAccountDto,
     walletEntity: WalletEntity,

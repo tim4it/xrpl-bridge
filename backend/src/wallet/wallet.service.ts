@@ -15,6 +15,7 @@ export class WalletService {
   async create(wallet: WalletDto): Promise<Wallet> {
     return this.walletRepository.save(WalletDto.toEntity(wallet));
   }
+
   async update(wallet: AddressPatchDto): Promise<WalletDto> {
     return this.findByAddress(wallet.current_address).then(
       async (walletToUpdate) => {

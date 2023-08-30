@@ -27,6 +27,11 @@ export class TransactionService {
       );
   }
 
+  /**
+   * Search transaction data by source or destination
+   * @param addressFind wallet address
+   * @param isSource search from source (true) or destination address
+   */
   async findByTransactionAddress(
     addressFind: string,
     isSource: boolean,
@@ -42,9 +47,5 @@ export class TransactionService {
           );
         return walletFound;
       });
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.transactionRepository.delete(id);
   }
 }
