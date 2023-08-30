@@ -8,6 +8,7 @@ import {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('Monitors wallets')
     .setDescription('The wallets API description')
