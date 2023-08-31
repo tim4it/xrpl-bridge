@@ -3,15 +3,15 @@ import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class WalletDto implements Readonly<WalletDto> {
-  @ApiProperty({ required: true, description: 'wallet address' })
+  @ApiProperty({ required: true, description: 'Wallet address' })
   @IsString()
   address: string;
 
-  @ApiProperty({ required: true, description: 'wallet public key' })
+  @ApiProperty({ required: true, description: 'Wallet public key' })
   @IsString()
   public_key: string;
 
-  @ApiProperty({ required: true, description: 'wallet seed' })
+  @ApiProperty({ required: true, description: 'Wallet seed' })
   @IsString()
   seed: string;
 

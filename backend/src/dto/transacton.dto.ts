@@ -3,35 +3,35 @@ import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TransactionDto implements Readonly<TransactionDto> {
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Ledger index' })
   @IsNumber()
   ledger_index: number;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Ledger hash' })
   @IsString()
   ledger_hash: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Source wallet address/account' })
   @IsString()
   account: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Destination wallet address' })
   @IsString()
   destination: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Transfer amount' })
   @IsNumber()
   amount: number;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Transaction fee' })
   @IsNumber()
   fee: number;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Transaction signature' })
   @IsString()
   tx_signature: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, description: 'Transaction date' })
   @IsNumber()
   date: number;
 

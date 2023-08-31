@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class TransactionFilterDto implements Readonly<TransactionFilterDto> {
   @ApiProperty({
     required: true,
-    description: 'source/destination address - depends on isSource',
+    description: 'Source/destination address - depends on isSource',
   })
   @IsString()
   address: string;

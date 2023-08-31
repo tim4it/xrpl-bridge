@@ -5,7 +5,7 @@ export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('bigint', { nullable: true })
+  @Column('bigint')
   ledgerIndex: number;
 
   @Column('varchar', { length: 100 })
