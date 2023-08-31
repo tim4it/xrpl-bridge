@@ -62,11 +62,12 @@ export class TransactionController {
   }
 
   @ApiOperation({
-    summary: 'Send transaction from source to destination with amount',
+    summary:
+      'Send transaction amount from source to destination wallet address',
   })
   @ApiResponse({
     status: 200,
-    description: 'Send transaction',
+    description: 'Send transaction amount',
   })
   @Post('send')
   async send(@Body() body: TransactionSendDto): Promise<any> {
@@ -88,7 +89,7 @@ export class TransactionController {
   }
 
   /**
-   * Send transaction from source to destination wallet address with amount. Return balance changes
+   * Send transaction amount from source to destination wallet address. Return balance changes
    * @param body body data from {@link TransactionSendDto}
    * @param walletEntity wallet entity {@link WalletEntity}
    * @private

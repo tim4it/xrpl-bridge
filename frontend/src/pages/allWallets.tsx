@@ -21,6 +21,9 @@ const AllWallets = () => {
   const fetchData = () => {
     axios.get('http://localhost:3000/v1/wallet').then((response) => {
       setWallets(response.data);
+    }).catch((error) => {
+      console.error('Error fetching wallet data:', error);
+      setIsButtonVisible(true);
     });
   };
 
@@ -29,6 +32,9 @@ const AllWallets = () => {
     axios.get('http://localhost:3000/v1/wallet/new').then(() => {
       setIsButtonVisible(true);
       setShowModal(true);
+    }).catch((error) => {
+      console.error('Error creating new wallet:', error);
+      setIsButtonVisible(true);
     });
   };
 

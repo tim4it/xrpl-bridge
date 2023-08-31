@@ -71,7 +71,7 @@ const AccountInfo = () => {
             </Col>
             <Col className="col-md-4 offset-md-4">
               <Button variant="primary" type="button" disabled={!isButtonVisible} onClick={() => fetchAccountInfo()}>
-                View account
+                Account info
               </Button>
             </Col>
           </Row>

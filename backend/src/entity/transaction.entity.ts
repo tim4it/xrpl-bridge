@@ -5,7 +5,7 @@ export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('integer', { nullable: true })
+  @Column('bigint', { nullable: true })
   ledgerIndex: number;
 
   @Column('varchar', { length: 100 })
@@ -17,15 +17,15 @@ export class Transaction {
   @Column('varchar', { length: 40 })
   destination: string;
 
-  @Column('integer')
+  @Column('bigint')
   amount: number;
 
-  @Column('integer')
+  @Column('bigint')
   fee: number;
 
   @Column('varchar', { length: 130 })
   txSignature: string;
 
-  @Column('integer')
+  @Column('bigint')
   date: number;
 }

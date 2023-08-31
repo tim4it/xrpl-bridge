@@ -29,7 +29,7 @@ const ViewTransaction = () => {
       setTransaction(response.data)
       setIsButtonVisible(true);
     }).catch((error) => {
-      console.error('Error viewing transaction:', error);
+      console.error('Error viewing transactions:', error);
       setIsButtonVisible(true);
     });
   };
@@ -44,7 +44,7 @@ const ViewTransaction = () => {
       setTransaction(response.data)
       setIsButtonVisible(true);
     }).catch((error) => {
-      console.error('Error viewing filtering transaction:', error);
+      console.error('Error viewing filtered transactions:', error);
       setIsButtonVisible(true);
     });
   };
